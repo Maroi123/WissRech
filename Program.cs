@@ -17,12 +17,12 @@ namespace WissRech
             // "FE"
 
 
-            int N = 10;
+            int N = 3;
             double[] b=new double[N];
             double[] txk = new double[N];
             for(int i=0; i<N; i++)
             {
-                b[i] = 1;
+                b[i] = 0;
                 txk[i] = Math.Pow(-1, i) * i;
             }
             CG cG = new CG(b, txk, 0, 1000000000, "Hilbert");
