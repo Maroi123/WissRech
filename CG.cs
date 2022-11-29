@@ -8,6 +8,7 @@ namespace WissRech
 {
     public class CG
     {
+        double[] tjk, tjk1, tpk, tpk1;  //Daniels methode neue Arrays, lösche die alten wenn es klappt
         double[] b, solution, xk1, xk, zk, tdk, tdk1, trk, trk1,Ak; //b = rechte seite, solution ist der Lösungsvektor xk1= xk+1, xk=xk,zk =z vektor ,tdk=dk,tdk1=tdk+1,trk=rk, trk1=trk+1;
         double eps, fehler, ak, bk; //eps ist die genauigkeit, fehler ist der aktuelle fehler, ak ist alpha k, bk ist beta k
         int N, dimension;    //N ist die anzahl der Iterationen, dimension ist die Dimension der Vektoren
@@ -93,6 +94,11 @@ namespace WissRech
             this.trk = new double[dimension];
             this.trk1 = new double[dimension];
             this.Ak = new double[dimension];
+            this.tjk = new double[dimension];
+            this.tjk1 = new double[dimension];
+            this.tpk = new double[dimension];
+            this.tpk1= = new double[dimension];
+
 
         }
         /// <summary>
@@ -101,7 +107,7 @@ namespace WissRech
         /// <param name="matrix_vec">Welche Matrix verwendet werden soll</param>
         private void CG_method(Func<double[], double[]> matrix_vec)
         {
-            int i = 0; //zählvariabel 
+         /*   int i = 0; //zählvariabel 
             double rkrk = 0; //produkt von rk transponiert rk
             double rk1rk1 = 0; // produkt von rk+1 transponiert rk+1
             double tdktz = 0; //produkt von dk transponiert z
@@ -140,6 +146,7 @@ namespace WissRech
                 }
                 i++;
             } while (fehler < eps && i < N);
+         */
             
         }
         /// <summary>
