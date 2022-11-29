@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace WissRech
 {
     public class CG
     {
+        double tk, bek;
         double[] tjk, tjk1, tpk, tpk1;  //Daniels methode neue Arrays, lösche die alten wenn es klappt
         double[] b, solution, xk1, xk, zk, tdk, tdk1, trk, trk1,Ak; //b = rechte seite, solution ist der Lösungsvektor xk1= xk+1, xk=xk,zk =z vektor ,tdk=dk,tdk1=tdk+1,trk=rk, trk1=trk+1;
         double eps, fehler, ak, bk; //eps ist die genauigkeit, fehler ist der aktuelle fehler, ak ist alpha k, bk ist beta k
@@ -25,7 +27,7 @@ namespace WissRech
         {
             if (b.Length != xk.Length)
             {
-                throw new InvalidOperationException("dimension not fitting");
+                throw new InvalidOperationException("dimension not fitting");  //werfe einen fehler wenn die dimensionen nicht passen. 
             }
             else
             {
@@ -39,7 +41,7 @@ namespace WissRech
                 
 
                 
-                for (int i = 0; i < dimension; i++)
+                for (int i = 0; i < dimension; i++) //initialisiere die array's mit 0 dieser schritt ist semi unnötig
                 {
                     this.solution[i] = 0;
                     this.xk1[i] = 0;
@@ -49,12 +51,17 @@ namespace WissRech
                     this.trk[i] = 0;
                     this.trk1[i] = 0;
                     this.Ak[i] = 0;
+                    this.tjk[i] = 0;
+                    this.tjk1[i] = 0;
+                    this.tpk[i] = 0;
+                    this.tpk1[i] = 0;
+
 
                 }
 
-                switch (Methode)
+                switch (Methode)  //wähle die Methode aus
                 {
-                    default:
+                    default:   //Erklärung: Switch methode funktioniert fast wie ein if nur mit dem unterschied das in den richtigen fall gesprungen wird bsp: du hast 100 fälle du könntest immer if(i==1){code} elseif(i==2){code} der computer prüft dann jedes mal ist i=1? nein dann ist i=2? nein usw.. switch ist einfach effektiver
                         break;
                     case "Hilbert":
                         CG_method(hilbert);
@@ -69,7 +76,7 @@ namespace WissRech
                         
 
                 }
-                for (int j = 0; j < dimension; j++)
+                for (int j = 0; j < dimension; j++) //gebe den lösungsvektor aus
                 {
                     solution[j] = xk[j];
                     Console.WriteLine(solution[j]);
@@ -97,7 +104,7 @@ namespace WissRech
             this.tjk = new double[dimension];
             this.tjk1 = new double[dimension];
             this.tpk = new double[dimension];
-            this.tpk1= = new double[dimension];
+            this.tpk1 = new double[dimension];
 
 
         }
@@ -107,6 +114,38 @@ namespace WissRech
         /// <param name="matrix_vec">Welche Matrix verwendet werden soll</param>
         private void CG_method(Func<double[], double[]> matrix_vec)
         {
+            int i = 0;
+            double normjkquad, dktdk, normjk1quad;
+            double[] vektor=new double[dimension];
+            vektor=matrix_vec(xk);
+            for (int j = 0; j < dimension; j++)
+            {
+                tjk[j] = vektor[j] - b[j];
+                tdk[j] = -tjk[j];
+            }
+            do
+            {
+                tpk=matrix_vec(tdk);
+                normjkquad = produkt(tjk, tjk); 
+                dktdk= produkt(tdk,tdk);
+                tk = normjkquad / dktdk;
+                for(int j = 0;j < dimension;j++)
+                {
+                    xk1[j] = xk[j] + tk * tdk[j];
+                    tjk1[j] = tjk[j] + tk * tpk[j];
+                }
+
+
+
+                for (int j = 0; j < dimension; j++)
+                {
+                    xk[j] = xk1[j];
+                    tjk[j] = tjk1[j];
+                    tdk[j] = tdk1[j];
+                    tpk[j] = tpk1[j];
+                }
+                i++;
+            } while (i < N);
          /*   int i = 0; //zählvariabel 
             double rkrk = 0; //produkt von rk transponiert rk
             double rk1rk1 = 0; // produkt von rk+1 transponiert rk+1

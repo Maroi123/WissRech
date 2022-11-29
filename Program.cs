@@ -23,9 +23,9 @@ namespace WissRech
             for(int i=0; i<N; i++)
             {
                 b[i] = 0;
-                txk[i] = Math.Pow(-1, i) * i;
+                txk[i] = 1;
             }
-            CG cG = new CG(b, txk, 0, 1000000000, "Hilbert");
+            CG cG = new CG(b, txk, 0, 100, "Hilbert");
             Console.ReadKey();
         }
     }
