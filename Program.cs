@@ -22,10 +22,10 @@ namespace WissRech
             double[] txk = new double[N];
             for(int i=0; i<N; i++)
             {
-                b[i] = 0;
+                b[i] = 1;
                 txk[i] = 1;
             }
-            CG cG = new CG(b, txk, 0, 100, "Hilbert");
+            CG cG = new CG(b, txk, 1, 10*N+1, "Hilbert");
             Console.ReadKey();
         }
     }

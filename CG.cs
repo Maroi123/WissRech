@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,9 +11,9 @@ namespace WissRech
 {
     public class CG
     {
-        double tk, bek;
-        double[] tjk, tjk1, tpk, tpk1;  //Daniels methode neue Arrays, lösche die alten wenn es klappt
-        double[] b, solution, xk1, xk, zk, tdk, tdk1, trk, trk1,Ak; //b = rechte seite, solution ist der Lösungsvektor xk1= xk+1, xk=xk,zk =z vektor ,tdk=dk,tdk1=tdk+1,trk=rk, trk1=trk+1;
+       
+         //Daniels methode neue Arrays, lösche die alten wenn es klappt
+        double[] b, solution, xk1, xk, tdk, tdk1, trk, trk1; //b = rechte seite, solution ist der Lösungsvektor xk1= xk+1, xk=xk,zk =z vektor ,tdk=dk,tdk1=tdk+1,trk=rk, trk1=trk+1;
         double eps, fehler, ak, bk; //eps ist die genauigkeit, fehler ist der aktuelle fehler, ak ist alpha k, bk ist beta k
         int N, dimension;    //N ist die anzahl der Iterationen, dimension ist die Dimension der Vektoren
         string Methode; //Welche Methode verwendet werden soll
@@ -33,7 +35,7 @@ namespace WissRech
             {
                 this.dimension = b.Length;
                 objektifizierung();
-                
+                this.N = N;
                 this.b = b;
                 this.xk = xk;
                 this.eps = eps;
@@ -45,16 +47,13 @@ namespace WissRech
                 {
                     this.solution[i] = 0;
                     this.xk1[i] = 0;
-                    this.zk[i] = 0;
+                    
                     this.tdk[i] = 0;
                     this.tdk1[i] = 0;
                     this.trk[i] = 0;
                     this.trk1[i] = 0;
-                    this.Ak[i] = 0;
-                    this.tjk[i] = 0;
-                    this.tjk1[i] = 0;
-                    this.tpk[i] = 0;
-                    this.tpk1[i] = 0;
+                    
+                 
 
 
                 }
@@ -76,11 +75,13 @@ namespace WissRech
                         
 
                 }
+                Console.WriteLine("Der Lösungsvektor ist: ");
                 for (int j = 0; j < dimension; j++) //gebe den lösungsvektor aus
                 {
                     solution[j] = xk[j];
                     Console.WriteLine(solution[j]);
                 }
+                Console.WriteLine("Der fehler beträgt ca: " + fehler);
             }
 
             
@@ -95,16 +96,13 @@ namespace WissRech
             this.solution = new double[dimension];
             this.xk1 = new double[dimension];
             this.xk = new double[dimension];
-            this.zk = new double[dimension];
+       
             this.tdk = new double[dimension];
             this.tdk1 = new double[dimension];
             this.trk = new double[dimension];
             this.trk1 = new double[dimension];
-            this.Ak = new double[dimension];
-            this.tjk = new double[dimension];
-            this.tjk1 = new double[dimension];
-            this.tpk = new double[dimension];
-            this.tpk1 = new double[dimension];
+            
+         
 
 
         }
@@ -114,78 +112,69 @@ namespace WissRech
         /// <param name="matrix_vec">Welche Matrix verwendet werden soll</param>
         private void CG_method(Func<double[], double[]> matrix_vec)
         {
+
             int i = 0;
-            double normjkquad, dktdk, normjk1quad;
-            double[] vektor=new double[dimension];
-            vektor=matrix_vec(xk);
-            for (int j = 0; j < dimension; j++)
+            double[] vector = new double[dimension];
+            vector = matrix_vec(xk);
+            for(int j = 0; j < dimension; j++)
             {
-                tjk[j] = vektor[j] - b[j];
-                tdk[j] = -tjk[j];
+                trk[j] = b[j] - vector[j];
+                tdk[j] = trk[j];
             }
             do
             {
-                tpk=matrix_vec(tdk);
-                normjkquad = produkt(tjk, tjk); 
-                dktdk= produkt(tdk,tdk);
-                tk = normjkquad / dktdk;
-                for(int j = 0;j < dimension;j++)
+                vector = matrix_vec(tdk);
+                if (produkt(tdk, vector) == 0)
                 {
-                    xk1[j] = xk[j] + tk * tdk[j];
-                    tjk1[j] = tjk[j] + tk * tpk[j];
+                    ak = 0;
+                }
+                else
+                {
+                    ak = produkt(trk, trk) / produkt(tdk, vector);
                 }
 
+                for (int j = 0; j < dimension; j++)
+                {
+                    xk1[j] = xk[j] + ak * tdk[j];
+                    trk1[j] = trk[j] - ak * vector[j];
+                }
+                if (produkt(trk, trk) == 0)
+                {
+                    bk = 0;
+                }
+                else
+                {
+                    bk = produkt(trk1, trk1) / produkt(trk, trk);
+                }
 
+                for (int j = 0; j < dimension; j++)
+                {
+                    tdk1[j] = trk1[j] + bk * tdk[j];
+                }
 
                 for (int j = 0; j < dimension; j++)
                 {
                     xk[j] = xk1[j];
-                    tjk[j] = tjk1[j];
                     tdk[j] = tdk1[j];
-                    tpk[j] = tpk1[j];
-                }
-                i++;
-            } while (i < N);
-         /*   int i = 0; //zählvariabel 
-            double rkrk = 0; //produkt von rk transponiert rk
-            double rk1rk1 = 0; // produkt von rk+1 transponiert rk+1
-            double tdktz = 0; //produkt von dk transponiert z
-            do
-            {
-
-                if (i == 0)  //die 0 iteration
-                {
-                    Ak=matrix_vec(xk);
-                    for(int j=0;j<dimension;j++)  
-                    {
-                        trk[j] = b[j] - Ak[j];
-                        tdk[j] = trk[j];
-                    }
-                } //die 1. iteration
-                zk=matrix_vec(tdk);
-                rkrk = produkt(trk, trk);
-                tdktz = produkt(tdk, Ak);
-                ak = rkrk / tdktz;
-                for(int j=0;j<dimension;j++)
-                {
-                    xk1[j] = xk[j] - ak * tdk[j];
-                    trk1[j] = trk[j] + ak * zk[j];
-                }
-                rk1rk1 = produkt(trk1, trk1);
-                bk= rk1rk1/rkrk; 
-                for(int j=0;j<dimension;j++)
-                {
-                    tdk1[j] = -trk1[j] + bk * tdk[j];
-                }
-                for(int j=0;j<dimension; j++)
-                {
-                    xk[j] = xk1[j];
                     trk[j] = trk1[j];
-                    tdk[j] = tdk1[j];
+
                 }
+                //berechne den fehler:
+                trk1 = matrix_vec(xk);
+                for (int j = 0; j < dimension; j++)
+                {
+                    vector[j] = b[j] - trk1[j];
+                }
+                fehler = produkt(vector, vector);
+
                 i++;
-            } while (fehler < eps && i < N);
-         */
+            } while (i < N && fehler > eps);
+            Console.WriteLine("Das ergebnis:Ax=");
+            vector = matrix_vec(xk);
+            for(int j=0;j<dimension;j++)
+            {
+                Console.WriteLine(vector[j]);
+            }
             
         }
         /// <summary>
