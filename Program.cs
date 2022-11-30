@@ -17,7 +17,7 @@ namespace WissRech
             // "FE"
 
 
-            int N = 3;
+            int N = 10;
             double[] b=new double[N];
             double[] txk = new double[N];
             for(int i=0; i<N; i++)
@@ -25,7 +25,7 @@ namespace WissRech
                 b[i] = 1;
                 txk[i] = 1;
             }
-            CG cG = new CG(b, txk, 1, 10*N+1, "Hilbert");
+            CG cG = new CG(b, txk, 0, 10*N+1, "Hilbert");
             Console.ReadKey();
         }
     }

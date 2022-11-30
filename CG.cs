@@ -33,13 +33,13 @@ namespace WissRech
             }
             else
             {
-                this.dimension = b.Length;
-                objektifizierung();
-                this.N = N;
-                this.b = b;
-                this.xk = xk;
-                this.eps = eps;
-                this.Methode = Methode;
+                this.dimension = b.Length; //setzte die dimension
+                objektifizierung(); // erstelle die arrays
+                this.N = N; //setze die anzahl der durchläufe
+                this.b = b; //setze die rechte seite
+                this.xk = xk; //setze den startvektor
+                this.eps = eps;  //setze den maximalen fehler den man haben will, dies ist ein oder, entweder der fehler wird erreicht oder die anzahl der durchläufe
+                this.Methode = Methode; //setze die methode
                 
 
                 
@@ -63,13 +63,13 @@ namespace WissRech
                     default:   //Erklärung: Switch methode funktioniert fast wie ein if nur mit dem unterschied das in den richtigen fall gesprungen wird bsp: du hast 100 fälle du könntest immer if(i==1){code} elseif(i==2){code} der computer prüft dann jedes mal ist i=1? nein dann ist i=2? nein usw.. switch ist einfach effektiver
                         break;
                     case "Hilbert":
-                        CG_method(hilbert);
+                        CG_method(hilbert);  //führe das CG verfahren mit Hilbert aus
                         break;
                     case "Identity":
-                        CG_method(identity);
+                        CG_method(identity); //führe das CG verfahren mit der id aus
                         break;
                     case "FE":
-                        CG_method(FE);
+                        CG_method(FE); //führe das CG verfahren mit der FE aus
                         break;
 
                         
@@ -81,7 +81,7 @@ namespace WissRech
                     solution[j] = xk[j];
                     Console.WriteLine(solution[j]);
                 }
-                Console.WriteLine("Der fehler beträgt ca: " + fehler);
+                Console.WriteLine("Der fehler beträgt ca: " + fehler); //und den fehler
             }
 
             
@@ -183,12 +183,13 @@ namespace WissRech
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        private double produkt(double[] x, double[] y)
+        private double produkt(double[] x, double[] y) 
         {
             double outp = 0;
             if(x.Length != y.Length)
             {
-                return 0;
+                throw new InvalidOperationException("Dimensionen passen nicht");
+                
             }
             else
             {
