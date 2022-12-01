@@ -11,8 +11,71 @@ namespace WissRech
 {
     public class CG
     {
+        public double get_fehler()
+        {
+            return fehler;
+        }
+        public double[] get_solution()
+        {
+            return solution;
+        }
+        public void set_b_x_(double[] b, double[] x)
+        {
+            if (b.Length != x.Length)
+            {
+                throw new InvalidOperationException("Vektoren haben nicht dieselbe Dimension");
+            }
+            else
+            {
+                this.b = b;
+                this.xk = x;
+                this.dimension = b.Length;
+            }
+        }
+        public void set_verfahren(string Methode)
+        {
+            this.Methode = Methode;
+        }
+        public void set_Anzahl(int N)
+        {
+            this.N = N;
+        }
+        public void run()
+        {
+            switch (Methode)  //wähle die Methode aus
+            {
+                default:   //Erklärung: Switch methode funktioniert fast wie ein if nur mit dem unterschied das in den richtigen fall gesprungen wird bsp: du hast 100 fälle du könntest immer if(i==1){code} elseif(i==2){code} der computer prüft dann jedes mal ist i=1? nein dann ist i=2? nein usw.. switch ist einfach effektiver
+                    break;
+                case "Hilbert":
+                    CG_method(hilbert);  //führe das CG verfahren mit Hilbert aus
+                    break;
+                case "Identity":
+                    CG_method(identity); //führe das CG verfahren mit der id aus
+                    break;
+                case "FE":
+                    CG_method(FE); //führe das CG verfahren mit der FE aus
+                    break;
+
+
+
+            }
+        }
+        public void Ausgabe()
+        {
+            Console.WriteLine("Der Lösungsvektor ist: ");
+            for (int j = 0; j < dimension; j++) //gebe den lösungsvektor aus
+            {
+                solution[j] = xk[j];
+                Console.WriteLine(solution[j]);
+            }
+            Console.WriteLine("Der fehler beträgt ca: " + fehler); //und den fehler
+        }
+        public void set_fehler(double eps)
+        {
+            this.eps = eps;
+        }
        
-         //Daniels methode neue Arrays, lösche die alten wenn es klappt
+  
         double[] b, solution, xk1, xk, tdk, tdk1, trk, trk1; //b = rechte seite, solution ist der Lösungsvektor xk1= xk+1, xk=xk,zk =z vektor ,tdk=dk,tdk1=tdk+1,trk=rk, trk1=trk+1;
         double eps, fehler, ak, bk; //eps ist die genauigkeit, fehler ist der aktuelle fehler, ak ist alpha k, bk ist beta k
         int N, dimension;    //N ist die anzahl der Iterationen, dimension ist die Dimension der Vektoren
@@ -58,35 +121,14 @@ namespace WissRech
 
                 }
 
-                switch (Methode)  //wähle die Methode aus
-                {
-                    default:   //Erklärung: Switch methode funktioniert fast wie ein if nur mit dem unterschied das in den richtigen fall gesprungen wird bsp: du hast 100 fälle du könntest immer if(i==1){code} elseif(i==2){code} der computer prüft dann jedes mal ist i=1? nein dann ist i=2? nein usw.. switch ist einfach effektiver
-                        break;
-                    case "Hilbert":
-                        CG_method(hilbert);  //führe das CG verfahren mit Hilbert aus
-                        break;
-                    case "Identity":
-                        CG_method(identity); //führe das CG verfahren mit der id aus
-                        break;
-                    case "FE":
-                        CG_method(FE); //führe das CG verfahren mit der FE aus
-                        break;
-
-                        
-
-                }
-                Console.WriteLine("Der Lösungsvektor ist: ");
-                for (int j = 0; j < dimension; j++) //gebe den lösungsvektor aus
-                {
-                    solution[j] = xk[j];
-                    Console.WriteLine(solution[j]);
-                }
-                Console.WriteLine("Der fehler beträgt ca: " + fehler); //und den fehler
+                
+               
             }
 
             
 
         }
+        
         /// <summary>
         /// objekte von den Vektoren erstellen. 
         /// </summary>
@@ -169,12 +211,12 @@ namespace WissRech
 
                 i++;
             } while (i < N && fehler > eps);
-            Console.WriteLine("Das ergebnis:Ax=");
-            vector = matrix_vec(xk);
-            for(int j=0;j<dimension;j++)
-            {
-                Console.WriteLine(vector[j]);
-            }
+           // Console.WriteLine("Das ergebnis:Ax=");
+            //vector = matrix_vec(xk);
+            //for(int j=0;j<dimension;j++)
+            //{
+              //  Console.WriteLine(vector[j]);
+            //}
             
         }
         /// <summary>
