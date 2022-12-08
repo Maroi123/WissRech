@@ -1,0 +1,8 @@
+C:\Users\alexb\Desktop\WS22_23\WissRech 1\Jannek_C#\WissRech-6a9d8626bf517ba3844e94395bf842e8ef466543\bin\Debug\WissRech.exe.config
+C:\Users\alexb\Desktop\WS22_23\WissRech 1\Jannek_C#\WissRech-6a9d8626bf517ba3844e94395bf842e8ef466543\bin\Debug\WissRech.exe
+C:\Users\alexb\Desktop\WS22_23\WissRech 1\Jannek_C#\WissRech-6a9d8626bf517ba3844e94395bf842e8ef466543\bin\Debug\WissRech.pdb
+C:\Users\alexb\Desktop\WS22_23\WissRech 1\Jannek_C#\WissRech-6a9d8626bf517ba3844e94395bf842e8ef466543\obj\Debug\WissRech.csproj.AssemblyReference.cache
+C:\Users\alexb\Desktop\WS22_23\WissRech 1\Jannek_C#\WissRech-6a9d8626bf517ba3844e94395bf842e8ef466543\obj\Debug\WissRech.csproj.SuggestedBindingRedirects.cache
+C:\Users\alexb\Desktop\WS22_23\WissRech 1\Jannek_C#\WissRech-6a9d8626bf517ba3844e94395bf842e8ef466543\obj\Debug\WissRech.csproj.CoreCompileInputs.cache
+C:\Users\alexb\Desktop\WS22_23\WissRech 1\Jannek_C#\WissRech-6a9d8626bf517ba3844e94395bf842e8ef466543\obj\Debug\WissRech.exe
+C:\Users\alexb\Desktop\WS22_23\WissRech 1\Jannek_C#\WissRech-6a9d8626bf517ba3844e94395bf842e8ef466543\obj\Debug\WissRech.pdb
